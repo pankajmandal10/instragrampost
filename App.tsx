@@ -23,7 +23,7 @@ const App = () => {
   const [following, setFollowing] = useState(false);
   const [page, setPage] = useState(1);
 
-  const PAGE_SIZE = 10;
+  const PAGE_SIZE = 5;
 
   const getPaginatedData = () => {
     const startIndex = (page - 1) * PAGE_SIZE;
@@ -34,7 +34,7 @@ const App = () => {
   useEffect(() => {
     const newData = getPaginatedData();
     setPosts(prevData => [...prevData, ...newData]);
-  }, [page, following]);
+  }, [page]);
 
   const handleScrollEnd = ({
     layoutMeasurement,
@@ -50,7 +50,7 @@ const App = () => {
   };
 
   const memoizedPosts = useMemo(() => posts, [posts]);
-
+  console.warn(posts.length);
   const renderDiagonosis = (item: Post) => {
     return (
       <View style={styles.container}>
@@ -64,10 +64,12 @@ const App = () => {
         <View style={styles.footer}>
           <TouchableOpacity
             onPress={() => {
-              following ? setFollowing(false) : setFollowing(true);
+              const status = following ? false : true;
+              setFollowing(status);
               posts.forEach(element => {
                 if (item.userId === element.userId) {
-                  element.isFollowing = following;
+                  console.warn(item.userId === element.userId);
+                  element.isFollowing = element.isFollowing ? false : true;
                 }
               });
             }}
